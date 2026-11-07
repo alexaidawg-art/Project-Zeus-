@@ -1,0 +1,36 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "project-zeus"
+version = "0.1.0"
+description = "A deterministic, graph-first cognitive architecture"
+requires-python = ">=3.12"
+dependencies = [
+    "networkx>=3.4"
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest",
+    "pytest-cov",
+    "ruff",
+    "mypy"
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.coverage.run]
+source = ["zeus"]
+
+[tool.coverage.report]
+fail_under = 90
