@@ -1,17 +1,18 @@
-
 """Graph management for the Zeus Connectome Core."""
 
 import networkx as nx
 
+from zeus.event_log import EventLog
 from zeus.models import Edge, Node
 
 
 class Connectome:
     """Manage typed nodes and relationships in a directed knowledge graph."""
 
-    def __init__(self) -> None:
+    def __init__(self, event_log: EventLog | None = None) -> None:
         self._graph: nx.DiGraph = nx.DiGraph()
         self._normalized_labels: dict[str, str] = {}
+        self.event_log = event_log if event_log is not None else EventLog()
 
     def add_node(self, node: Node) -> None:
         """Add a node while enforcing unique IDs and normalized labels."""
@@ -33,6 +34,15 @@ class Connectome:
             confidence=node.confidence,
         )
         self._normalized_labels[normalized_label] = node.id
+
+        self.event_log.record(
+            "node_created",
+            {
+                "node_id": node.id,
+                "node_type": node.node_type,
+                "label": node.label,
+            },
+        )
 
     def get_node(self, node_id: str) -> Node | None:
         """Retrieve a node by its ID."""
@@ -68,6 +78,16 @@ class Connectome:
             edge_type=edge.edge_type,
             weight=edge.weight,
             attributes=dict(edge.attributes),
+        )
+
+        self.event_log.record(
+            "edge_created",
+            {
+                "source": edge.source,
+                "target": edge.target,
+                "edge_type": edge.edge_type,
+                "weight": edge.weight,
+            },
         )
 
     def get_edge(self, source: str, target: str) -> Edge | None:
@@ -107,6 +127,16 @@ class Connectome:
         )
 
         self._graph.edges[source, target]["weight"] = updated.weight
+
+        self.event_log.record(
+            "edge_weight_updated",
+            {
+                "source": source,
+                "target": target,
+                "old_weight": edge.weight,
+                "new_weight": updated.weight,
+            },
+        )
 
     def has_node(self, node_id: str) -> bool:
         """Check whether a node exists."""
