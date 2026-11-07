@@ -274,3 +274,40 @@ def test_failed_save_preserves_existing_file(
         store.save(graph, path)
 
     assert path.read_text(encoding="utf-8") == "original"
+
+from zeus import networkx_store
+
+
+def test_failed_atomic_replace_cleans_up_temporary_file(
+    store: NetworkXStore, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    path = tmp_path / "graph.json"
+    path.write_text("original", encoding="utf-8")
+
+    graph = nx.DiGraph()
+    graph.add_node("a")
+
+    def fail_replace(source: str, destination: Path) -> None:
+        raise OSError("simulated replacement failure")
+
+    monkeypatch.setattr(networkx_store.os, "replace", fail_replace)
+
+    with pytest.raises(OSError, match="simulated replacement failure"):
+        store.save(graph, path)
+
+    assert path.read_text(encoding="utf-8") == "original"
+    assert list(tmp_path.glob(".graph.json.*.tmp")) == []
+
+
+def test_load_rejects_non_finite_node_identifier(
+    store: NetworkXStore, tmp_path: Path
+) -> None:
+    path = tmp_path / "graph.json"
+    path.write_text(
+        '{"format_version":1,"graph":{},'
+        '"nodes":[{"id":NaN,"attributes":{}}],"edges":[]}',
+        encoding="utf-8",
+    )
+
+    with pytest.raises(ValueError, match="non-finite"):
+        store.load(path)
