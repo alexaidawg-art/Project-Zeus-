@@ -2,7 +2,7 @@
 """Deterministic structured event logging for Zeus."""
 
 from dataclasses import dataclass, field
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from typing import Any
 
 
@@ -32,9 +32,7 @@ class EventLog:
         if not isinstance(event_type, str) or not event_type.strip():
             raise ValueError("Event type must be a non-empty string")
 
-        event_timestamp = timestamp or datetime.now(
-            timezone.utc
-        ).isoformat()
+        event_timestamp = timestamp or datetime.now(UTC).isoformat()
 
         if not isinstance(event_timestamp, str) or not event_timestamp.strip():
             raise ValueError("Timestamp must be a non-empty string")
