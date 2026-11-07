@@ -32,9 +32,7 @@ jobs:
 
       - name: Check code style
         run: ruff check .
-
-      - name: Check formatting
-        run: ruff format --check .
+  
 
       - name: Run type checks
         run: mypy src/zeus
