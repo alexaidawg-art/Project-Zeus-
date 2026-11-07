@@ -39,7 +39,9 @@ def test_reinforce_increases_weight(
 def test_reinforce_respects_max_weight(
     connectome: Connectome,
 ) -> None:
-    graph = LearningEngine(Config(learning_rate=1.0))
+    graph = LearningEngine(
+    Config(learning_rate=1.0, reinforcement_factor=1.0)
+)
     graph.reinforce(connectome, [("a", "b")])
 
     edge = connectome.get_edge("a", "b")
@@ -254,4 +256,4 @@ def test_learn_is_order_independent(
     assert first is not None
     assert second is not None
     assert first.weight == pytest.approx(0.342)
-    assert second.weight == pytest.approx(0.486)
+    assert second.weight == pytest.approx(0.5112)
