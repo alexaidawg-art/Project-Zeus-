@@ -93,7 +93,7 @@ class NetworkXStore(GraphStore):
         if not isinstance(nodes, list) or not isinstance(edges, list):
             raise TypeError("nodes and edges must be lists")
 
-        graph = nx.DiGraph()
+        graph: nx.DiGraph = nx.DiGraph()
         graph.graph.update(graph_attributes)
 
         for item in nodes:
