@@ -12,7 +12,6 @@ import networkx as nx
 
 from zeus.graph_store import GraphStore
 
-
 FORMAT_VERSION = 1
 
 
