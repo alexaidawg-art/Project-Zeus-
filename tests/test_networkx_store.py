@@ -240,7 +240,7 @@ def test_load_rejects_invalid_node_identifier(
     }
     path.write_text(json.dumps(payload), encoding="utf-8")
 
-    with pytest.raises(ValueError, match="node identifiers"):
+    with pytest.raises(TypeError, match="node identifiers"):
         store.load(path)
 
 
