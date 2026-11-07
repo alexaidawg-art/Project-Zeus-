@@ -71,6 +71,31 @@ class Connectome:
         )
 
     def get_edge(self, source: str, target: str) -> Edge | None:
+
+    def update_edge_weight(
+        self,
+        source: str,
+        target: str,
+        weight: float,
+    ) -> None:
+        """Update the weight of an existing directed relationship."""
+        edge = self.get_edge(source, target)
+
+        if edge is None:
+            raise ValueError(
+                f"Relationship does not exist: {source} -> {target}"
+            )
+
+        updated = Edge(
+            source=edge.source,
+            target=edge.target,
+            edge_type=edge.edge_type,
+            weight=weight,
+            attributes=edge.attributes,
+        )
+
+        self._graph.edges[source, target]["weight"] = updated.weight
+
         """Retrieve a directed relationship between two nodes."""
         if not self._graph.has_edge(source, target):
             return None
