@@ -16,7 +16,8 @@ dev = [
     "pytest",
     "pytest-cov",
     "ruff",
-    "mypy"
+    "mypy",
+    "types-networkx"
 ]
 
 [tool.setuptools.packages.find]
