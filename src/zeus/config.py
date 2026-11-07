@@ -1,8 +1,8 @@
 
 """Validated configuration for the Zeus Connectome Core."""
 
-from dataclasses import dataclass
 import math
+from dataclasses import dataclass
 
 
 @dataclass(frozen=True)
