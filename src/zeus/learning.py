@@ -1,8 +1,6 @@
 
 """Deterministic learning and relationship reinforcement for Zeus."""
 
-import math
-
 from zeus.config import Config
 from zeus.connectome import Connectome
 
