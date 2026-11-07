@@ -1,7 +1,7 @@
 
 """Validation of proposed Connectome changes."""
 
-from typing import Any
+from typing import Any, ClassVar
 
 from zeus.config import Config
 from zeus.connectome import Connectome
@@ -11,7 +11,7 @@ from zeus.models import Edge, Node
 class ProposalValidator:
     """Validate proposed graph changes without mutating the Connectome."""
 
-    ALLOWED_OPERATIONS = {
+    ALLOWED_OPERATIONS: ClassVar[set[str]] = {
         "create_node",
         "create_edge",
         "update_edge_weight",
@@ -32,8 +32,7 @@ class ProposalValidator:
         operation = proposal.get("operation")
 
         if not isinstance(operation, str):
-            raise ValueError("Proposal operation must be a string")
-
+    raise TypeError("Proposal operation must be a string")
         if operation not in self.ALLOWED_OPERATIONS:
             raise ValueError(f"Unsupported proposal operation: {operation}")
 
