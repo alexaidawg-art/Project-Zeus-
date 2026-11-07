@@ -128,7 +128,7 @@ def test_top_k_limits_propagated_candidates(
 def test_equal_scores_use_node_id_tiebreaking(
     connectome: Connectome,
 ) -> None:
-    engine = ActivationEngine(Config(k=2))
+    engine = ActivationEngine(Config(k=1))
     connectome.add_edge(Edge("a", "c", "related", weight=1.0))
     connectome.add_edge(Edge("a", "b", "related", weight=1.0))
 
@@ -252,9 +252,8 @@ def test_top_k_helper_handles_empty_candidates(
     assert engine._top_k({}) == {}
 
 
-def test_top_k_helper_sorts_deterministically(
-    engine: ActivationEngine,
-) -> None:
+def test_top_k_helper_sorts_deterministically() -> None:
+    engine = ActivationEngine(Config(k=2))
     result = engine._top_k({"c": 0.5, "a": 0.9, "b": 0.9})
 
     assert list(result) == ["a", "b"]
