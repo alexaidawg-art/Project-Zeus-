@@ -32,7 +32,7 @@ class ProposalValidator:
         operation = proposal.get("operation")
 
         if not isinstance(operation, str):
-    raise TypeError("Proposal operation must be a string")
+            raise TypeError("Proposal operation must be a string")
         if operation not in self.ALLOWED_OPERATIONS:
             raise ValueError(f"Unsupported proposal operation: {operation}")
 
