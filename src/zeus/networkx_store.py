@@ -80,7 +80,7 @@ class NetworkXStore(GraphStore):
             payload: Any = json.load(file)
 
         if not isinstance(payload, dict):
-            raise ValueError("graph data must be a JSON object")
+            raise TypeError("graph data must be a JSON object")
 
         if payload.get("format_version") != FORMAT_VERSION:
             raise ValueError("unsupported graph format version")
@@ -90,16 +90,16 @@ class NetworkXStore(GraphStore):
         edges = payload.get("edges")
 
         if not isinstance(graph_attributes, dict):
-            raise ValueError("graph attributes must be an object")
+            raise TypeError("graph attributes must be an object")
         if not isinstance(nodes, list) or not isinstance(edges, list):
-            raise ValueError("nodes and edges must be lists")
+            raise TypeError("nodes and edges must be lists")
 
         graph = nx.DiGraph()
         graph.graph.update(graph_attributes)
 
         for item in nodes:
             if not isinstance(item, dict):
-                raise ValueError("each node must be an object")
+                raise TypeError("each node must be an object")
 
             node_id = item.get("id")
             attributes = item.get("attributes")
@@ -107,7 +107,7 @@ class NetworkXStore(GraphStore):
             self._validate_node_id(node_id)
 
             if not isinstance(attributes, dict):
-                raise ValueError("node attributes must be an object")
+                raise TypeError("node attributes must be an object")
             if node_id in graph:
                 raise ValueError("duplicate node identifier")
 
@@ -115,7 +115,7 @@ class NetworkXStore(GraphStore):
 
         for item in edges:
             if not isinstance(item, dict):
-                raise ValueError("each edge must be an object")
+                raise TypeError("each edge must be an object")
 
             source = item.get("source")
             target = item.get("target")
@@ -127,7 +127,7 @@ class NetworkXStore(GraphStore):
             if source not in graph or target not in graph:
                 raise ValueError("edge references an unknown node")
             if not isinstance(attributes, dict):
-                raise ValueError("edge attributes must be an object")
+                raise TypeError("edge attributes must be an object")
             if graph.has_edge(source, target):
                 raise ValueError("duplicate directed edge")
 
@@ -143,7 +143,7 @@ class NetworkXStore(GraphStore):
     def _validate_node_id(node_id: Any) -> None:
         """Restrict node IDs to JSON-safe scalar values."""
         if not isinstance(node_id, (str, int, float, bool)):
-            raise ValueError("node identifiers must be strings, numbers, or booleans")
+            raise TypeError("node identifiers must be strings, numbers, or booleans")
 
         if isinstance(node_id, float) and not math.isfinite(node_id):
             raise ValueError("node identifiers cannot be non-finite numbers")
