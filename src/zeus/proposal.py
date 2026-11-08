@@ -54,6 +54,18 @@ class ProposalValidator:
     ) -> None:
         required = {"id", "node_type", "label"}
         self._check_required(proposal, required)
+        self._check_unexpected(
+            proposal,
+            {
+                "operation",
+                "id",
+                "node_type",
+                "label",
+                "attributes",
+                "importance",
+                "confidence",
+            },
+        )
 
         node = Node(
             id=proposal["id"],
@@ -83,6 +95,17 @@ class ProposalValidator:
     ) -> None:
         required = {"source", "target", "edge_type"}
         self._check_required(proposal, required)
+        self._check_unexpected(
+            proposal,
+            {
+                "operation",
+                "source",
+                "target",
+                "edge_type",
+                "weight",
+                "attributes",
+            },
+        )
 
         edge = Edge(
             source=proposal["source"],
@@ -113,6 +136,10 @@ class ProposalValidator:
     ) -> None:
         required = {"source", "target", "weight"}
         self._check_required(proposal, required)
+        self._check_unexpected(
+            proposal,
+            {"operation", "source", "target", "weight"},
+        )
 
         source = proposal["source"]
         target = proposal["target"]
@@ -146,3 +173,15 @@ class ProposalValidator:
             raise ValueError(
                 f"Missing required proposal fields: {', '.join(sorted(missing))}"
             )
+
+    @staticmethod
+    def _check_unexpected(
+        proposal: dict[str, Any],
+        allowed: set[str],
+    ) -> None:
+        """Reject fields that are not part of the operation schema."""
+        unexpected = set(proposal) - allowed
+
+        if unexpected:
+            fields = ", ".join(sorted(str(field) for field in unexpected))
+            raise ValueError(f"Unexpected proposal fields: {fields}")
