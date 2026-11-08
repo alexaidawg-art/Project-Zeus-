@@ -1,4 +1,3 @@
-
 """Validation of proposed Connectome changes."""
 
 from typing import Any, ClassVar
@@ -29,7 +28,10 @@ class ProposalValidator:
         if not isinstance(proposal, dict):
             raise TypeError("Proposal must be a dictionary")
 
-        operation = proposal.get("operation")
+        if "operation" not in proposal:
+            raise ValueError("Proposal operation must be a string")
+
+        operation = proposal["operation"]
 
         if not isinstance(operation, str):
             raise TypeError("Proposal operation must be a string")
@@ -89,6 +91,9 @@ class ProposalValidator:
             weight=proposal.get("weight", self.config.initial_weight),
             attributes=proposal.get("attributes", {}),
         )
+
+        if edge.weight > self.config.max_weight:
+            raise ValueError("Proposed weight exceeds configured maximum")
 
         if not connectome.has_node(edge.source):
             raise ValueError(f"Source node does not exist: {edge.source}")
