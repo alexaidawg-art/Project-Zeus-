@@ -1,8 +1,6 @@
 
 """Reproducible benchmarks for the Zeus Connectome Core."""
 
-from __future__ import annotations
-
 import argparse
 import json
 import platform
@@ -10,6 +8,8 @@ import random
 import statistics
 import sys
 import time
+from __future__ import annotations
+
 from pathlib import Path
 
 import networkx as nx
