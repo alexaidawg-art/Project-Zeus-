@@ -1,6 +1,8 @@
 
 """Reproducible benchmarks for the Zeus Connectome Core."""
 
+from __future__ import annotations
+
 import argparse
 import json
 import platform
@@ -8,8 +10,6 @@ import random
 import statistics
 import sys
 import time
-from __future__ import annotations
-
 from pathlib import Path
 
 import networkx as nx
@@ -19,7 +19,6 @@ from zeus.config import Config
 from zeus.connectome import Connectome
 from zeus.learning import LearningEngine
 from zeus.models import Edge, Node
-
 
 # Fixed benchmark parameters.
 RANDOM_SEED = 1729
@@ -109,7 +108,7 @@ def benchmark_activation(config: Config) -> dict[str, object]:
         for index in range(10)
     }
 
-    def run_batch() -> None:
+    def run_batch() -> float:
         for _ in range(ACTIVATION_CALLS):
             engine.activate(connectome, seeds)
 
