@@ -11,7 +11,6 @@ import statistics
 import sys
 import time
 from pathlib import Path
-from typing import Callable
 
 import networkx as nx
 
