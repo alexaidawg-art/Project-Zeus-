@@ -148,3 +148,27 @@ Latest reported CI results:
 - GitHub Actions checks green
 
 Final milestone completion remains subject to architecture review, documentation review, and pull request approval.
+
+Reproducible Benchmarks
+
+Project Zeus includes a standalone benchmark for bounded activation propagation and relationship learning.
+
+Run the benchmark from the repository root after installing the project:
+
+pip install -e .
+python benchmarks/benchmark_core.py
+
+To save the results as JSON:
+
+python benchmarks/benchmark_core.py --output benchmarks/results.json
+
+Methodology
+
+- Uses a fixed random seed and deterministic graph construction.
+- Builds a graph containing 300 nodes and 1,200 directed relationships.
+- Performs warm-up rounds before collecting measurements.
+- Reports average, median, minimum, and maximum execution times.
+- Records Python, platform, and NetworkX environment information.
+- Rebuilds learning fixtures outside the timed section to prevent weight changes from contaminating subsequent measurements.
+
+Benchmark timings are informational and are not CI pass/fail criteria. Results depend on the machine and runtime environment.
